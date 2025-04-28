@@ -1,0 +1,52 @@
+#cloud-config
+
+write_files:
+  - path: "/etc/sudoers.d/200-wafrn-setup"
+    permissions: "0440"
+    encoding: "gzip+base64"
+    content: |
+      ${sudoers_content}
+
+  - path: "/wafrn-cloud-config"
+    permissions: "0640"
+    encoding: "gzip+base64"
+    content: |
+      ${environment_content}
+
+  - path: "/post_backup.sh"
+    permissions: "0755"
+    encoding: "gzip+base64"
+    content: |
+      ${post_backup_content}
+
+  - path: "/root/setup.sh"
+    permissions: "0777"
+    encoding: "gzip+base64"
+    content: |
+      ${setup_template_sh_content}
+
+  - path: "/fluentd.conf"
+    permissions: "0644"
+    encoding: "gzip+base64"
+    content: |
+      ${fluentd_content}
+
+  - path: "/onsite.s3cfg"
+    permissions: "0644"
+    encoding: "gzip+base64"
+    content: |
+      ${onsite_content}
+
+  - path: "/offsite.s3cfg"
+    permissions: "0644"
+    encoding: "gzip+base64"
+    content: |
+      ${offsite_content}
+
+runcmd:
+ - echo "Running prep scripts..."
+ - /root/setup.sh
+ - echo "Finished prep scripts."
+
+final_message: "The system is finally up, after $UPTIME seconds"
+output: {all: '| tee -a /root/cloud-init-output.log'}

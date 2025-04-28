@@ -1,0 +1,36 @@
+<source>
+  @type tail
+  path /root/cloud-init-output.log
+  pos_file /var/run/fluent/cloud-init-output.log.pos
+  tag install
+  path_key tailed_path
+  <parse>
+    @type none
+  </parse>
+</source>
+<source>
+  @type tail
+  path /var/lib/docker/containers/*/*.log
+  pos_file /var/run/fluent/docker.log.pos
+  tag docker
+  path_key tailed_path
+  <parse>
+    @type json
+    time_type string
+    time_format %Y-%m-%dT%H:%M:%S.%NZ
+  </parse>
+</source>
+<source>
+  @type tail
+  path /var/log/syslog
+  pos_file /var/run/fluent/syslog.log.pos
+  tag syslog
+  path_key tailed_path
+  <parse>
+    @type syslog
+  </parse>
+</source>
+<match {syslog.**,install.**,docker.**}>
+  @type oci_logging
+  log_object_id ${log_id}
+</match>

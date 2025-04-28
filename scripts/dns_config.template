@@ -1,0 +1,5 @@
+${wafrn_domain_name}. A ${ip_address}
+%{if enable_bluesky}${bluesky_domain_name}. A ${ip_address}
+*.${bluesky_domain_name}. A ${ip_address}%{endif}
+%{if has_oci_email}${email_domain_name}. TXT "${dns_spf_value}"
+${dns_dkim_key} CNAME ${dns_dkim_value}%{endif}
