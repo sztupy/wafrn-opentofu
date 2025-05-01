@@ -104,13 +104,32 @@ Note: make sure every single domain in the file above ends in a `"."` for exampl
 
 Once this file is saved open up the management config website of your DNS provider and import the file above.
 
+> Cannot import files into your DNS provider? You need to then add each of the five lines above from your config one by one. However you will need to delete the domain name (e.g. `example.com.` from the first column on all options!
+>
+> For example the first line would be:
+> * Create an `A` record
+> * Name is `wafrn` (remove the `example.com.`)
+> * Value is `169.254.10.11
+>
+> (Lines 2&3 are similar)
+>
+> For the SPF settings - line 4:
+> * Create a `TXT` record
+> * Name is `wafrn` (remove the `example.com.`)
+> * Value is `"v=spf1 include:rp.oracleemaildelivery.com include:ap.rp.oracleemaildelivery.com include:eu.rp.oracleemaildelivery.com ~all"` (make sure to include the `"` marks as well)
+>
+> Another example is the DKIM settings - line 5:
+> * Create a `CNAME` record
+> * Name is `abcdeFGHijKLmnOP._domainkey.wafrn` (remove the `example.com.`)
+> * Value is `abcdeFGHijKLmnOP.wafrn.example.com.dkim.mrs1.oracleemaildelivery.com.` (Keep everything, including the `.` at the end)
+
 #### Final touches
 
 If all is well, after a couple more minutes you should be able to access your website on the domain configured by pressing the "Open WAFRN" button. If it doesn't work you either need to wait a bit more, or check [the logs](#logging) to see what's up. While you wait please double check [your email](#emails-dont-work) and [on-site backup](#on-site-backups-dont-work) settings.
 
 To login you can obtain the administrator password from the same page you got your DNS settings.
 
-** Congratulations and Happy WAFRNing! **
+**Congratulations and Happy WAFRNing!**
 
 ![Congratulations by Placidplace on Pixabay](images/congratulations-7600_256.gif)
 
