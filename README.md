@@ -85,12 +85,14 @@ wafrn.example.com. A 169.254.10.11
 bluesky.example.com. A 169.254.10.11
 *.bluesky.example.com. A 169.254.10.11
 wafrn.example.com. TXT "v=spf1 include:rp.oracleemaildelivery.com include:ap.rp.oracleemaildelivery.com include:eu.rp.oracleemaildelivery.com ~all"
-abcdeFGHijKLmnOP._domainkey.wafrn.example.com. CNAME abcdeFGHijKLmnOP.wafrn.example.com.dkim.mrs1.oracleemaildelivery.com
+abcdeFGHijKLmnOP._domainkey.wafrn.example.com. CNAME abcdeFGHijKLmnOP.wafrn.example.com.dkim.mrs1.oracleemaildelivery.com.
 ```
+
+Note: make sure every single domain in the file above ends in a `"."` for example `abcdeFGHijKLmnOP.wafrn.example.com.dkim.mrs1.oracleemaildelivery.com.` The `"."` is important. Not having that will cause issues during domain setup.
 
 Once this file is saved open up the management config website of your DNS provider and import the file above.
 
-If all is well, after a couple more minutes you should be able to access your website on the domain configured by pressing the "Open WAFRN" button. If it doesn't work you either need to wait a bit more, or check [the logs](#logging) to see what's up.
+If all is well, after a couple more minutes you should be able to access your website on the domain configured by pressing the "Open WAFRN" button. If it doesn't work you either need to wait a bit more, or check [the logs](#logging) to see what's up. While you wait please double check your email and on-site backup settings.
 
 To login you can obtain the administrator password from the same page you got your DNS settings.
 
@@ -273,6 +275,20 @@ Also you will need a Credit or Debit card during the signup for verification, an
 ### I've heard Oracle occasionally deletes Always Free setups
 
 Yes, hence it's advised to keep both on-site and also setup off-site backups. You can also upgrade your account from a free tier to a pay-as-you-go tier. It will still be free if you don't go over the Always Free tier limits, but after upgrade there's a chance that you can get billed if you go over some kind of limit. It is generally advised to keep an eye out on billling and to assign a credit/debit card to your billing with low limits.
+
+### Emails don't work
+
+Go to [Email Domains](https://cloud.oracle.com/messaging/email/email-domains) on the cloud platform. Select your actice domain then check DKIM settings. If it's not "Active" then double check the DNS config that all is well. Make sure for example that the CNAME setting for DKIM point to Oracle's server and not to a local link
+
+![DKIM](images/dkim.png)
+
+### On-site backups don't work
+
+Go to [Tenancy Details](https://cloud.oracle.com/tenancy) on the cloud platform. Check that the "Amazon S3 compatibility API designated compartment" setting points to "<your_cloud_name> (root)". If not, click "Edit Object Storage Settings", then select your "<your_cloud_name> (root)" compartment for both options:
+
+![Object Storage](images/object_storage.png)
+
+(Note: there is likely only one single option you can select for both. Do that)
 
 # LICENSE
 
