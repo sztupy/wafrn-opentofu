@@ -28,7 +28,9 @@ You can also deploy this repository manually by setting up the `.tfvars` by hand
 
 ### Registration
 
-You can [register for Oracle Cloud here](https://signup.cloud.oracle.com/). Email might be slow to arrive. Please note you need to enter your real legal name and address during signup as it will be verified against the credit card / debit card details. Entering fake details will likely fail verification.
+You can [register for Oracle Cloud here](https://signup.cloud.oracle.com/). Email might be slow to arrive
+
+> **Note:** you need to enter your real legal name and address during signup as it will be verified against the credit card / debit card details. Entering fake details will likely fail verification.
 
 When it comes to the Home Region selector make sure you select a region that you're happy that your data will reside in. It might also have some legal implications, for example selecting regions in the EU will definitely require you to abide to GDPR regulations, as well as any local regulations in that specific country.
 
@@ -100,11 +102,11 @@ wafrn.example.com. TXT "v=spf1 include:rp.oracleemaildelivery.com include:ap.rp.
 abcdeFGHijKLmnOP._domainkey.wafrn.example.com. CNAME abcdeFGHijKLmnOP.wafrn.example.com.dkim.mrs1.oracleemaildelivery.com.
 ```
 
-Note: make sure every single domain in the file above ends in a `"."` for example `abcdeFGHijKLmnOP.wafrn.example.com.dkim.mrs1.oracleemaildelivery.com.` The `"."` is important. Not having that will cause issues during domain setup.
+> **Note:** make sure every single domain in the file above ends in a `"."` for example `abcdeFGHijKLmnOP.wafrn.example.com.dkim.mrs1.oracleemaildelivery.com.` The `"."` is important. Not having that will cause issues during domain setup.
 
 Once this file is saved open up the management config website of your DNS provider and import the file above.
 
-> Cannot import files into your DNS provider? You need to then add each of the five lines above from your config one by one. However you will need to delete the domain name (e.g. `example.com.` from the first column on all options!
+> **Cannot import files into your DNS provider?** You need to then add each of the five lines above from your config one by one. However you will need to delete the domain name (e.g. `example.com.` from the first column on all options!
 >
 > For example the first line would be:
 > * Create an `A` record
@@ -199,7 +201,9 @@ This will first backup the current system, then update the application. Once upd
 ./wafrn.sh restore <backup_location>
 ```
 
-This allows you to restore a specific backup. Note: you need to copy/download the backup to the box first
+This allows you to restore a specific backup.
+
+> **Note:** you need to copy/download the backup to the box first
 
 #### PDS (Bluesky) Admin
 
@@ -233,7 +237,7 @@ To update your infrastucture you can manually upload a fresh Opentofu config:
 
 Afterwards you need to download the latest zip file from the Releases page here on GitHub, and upload it over at OCI. The steps afterwards are similar to what you have done during initial setup but it is advised **NOT** to "Run Apply". Instead click "Plan" on the next page and manually check all the changes that the system want to do. If in doubt reach out to us in the [Wafrn Discord](https://discord.gg/EXpCBpvM) to get support.
 
-Note: not all features can be updated later. For example to update SMTP settings, or to set up or change the backup settings you will need to manually update the settings on the box.
+> **Note:** not all features can be updated later. For example to update SMTP settings, or to set up or change the backup settings you will need to manually update the settings on the box.
 
 ### Deleting the stack
 
@@ -249,7 +253,7 @@ To delete your wafrn stack and free up all resources used by wafrn:
 
 ![Destroy](images/destroy.png)
 
-**Note:** You need to do "Destroy" first to clean up resources. If you "Delete Stack" without running "Destroy" your instances, network setup, additional users, buckets, email settings, ip addresses etc. will still keep running, consume resources and need to be cleaned up manually
+> **Note:** You need to do "Destroy" first to clean up resources. If you "Delete Stack" without running "Destroy" your instances, network setup, additional users, buckets, email settings, ip addresses etc. will still keep running, consume resources and need to be cleaned up manually
 
 ## Features
 
@@ -279,7 +283,7 @@ Check [this page on Wafrn GitHub](https://github.com/gabboman/wafrn/tree/main/in
 
 By default the stack will use OCI's email sending feature to send emails. For it to work you will need to add proper DCIM and SPF policies to your DNS setting, which are included in the DNS setup phase.
 
-Note: the free tier only allows 100 emails a day, so it's preferred to have "Send pre-activation emails" disabled as it could be misused by attackers spamming the system and going over this limit easily.
+> **Note:** the free tier only allows 100 emails a day, so it's preferred to have "Send pre-activation emails" disabled as it could be misused by attackers spamming the system and going over this limit easily.
 
 You can also provide your own SMTP config if you have something better, or disable email sending completely.
 
@@ -327,7 +331,7 @@ Go to [Tenancy Details](https://cloud.oracle.com/tenancy) on the cloud platform.
 
 ![Object Storage](images/object_storage.png)
 
-(Note: there is likely only one single option you can select for both. Do that)
+> **Note:** there is likely only one single option you can select for both. Do that
 
 # LICENSE
 
