@@ -40,15 +40,21 @@ Also there might be warnings about low resources in some regions. It is advised 
 
 ### Stack init
 
+#### Magic Button
+
 Click the below magic button to initiate your wafrn stack:
 
 [![Deploy to Oracle Cloud][magic_button]][magic_wafrn_basic_stack]
+
+#### Terms and Conditions
 
 Accept the terms and conditions
 
 ![Terms and Conditions](images/terms_and_conditions.png)
 
 Then click NEXT on the bottom of the page
+
+#### Enter configuration
 
 Next page is where you need to fill in your configuration. The following are the only mandatory details you need to fill in:
 
@@ -58,9 +64,13 @@ Next page is where you need to fill in your configuration. The following are the
 * Enable/Disable Bluesky integration
 * Bluesky domain name and admin user's handle
 
+![Config](images/config.png)
+
 You can also check "Show advanced options?" to enable/disable extra features. Please check the [Features section](#features) for mode details on these options. While the defaults are good as a basic setup you might want to go through the rest as well.
 
 Once you finish click NEXT on the bottom of the page again.
+
+#### Apply
 
 On the final page double check that everything still makes sense. If yes, at the bottom of the page make sure "Run Apply" is selected, then click "CREATE"
 
@@ -73,6 +83,8 @@ Wait for Apply to finish. This can take somewhere between 5-10 minutes. You want
 ![Success page](images/success.png)
 
 If this is in red, and doesn't say "SUCCEEDED" then check the logs for any errors.
+
+#### DNS Settings
 
 Final bit is updating your DNS config. Make sure to "Copy" the DNS settings generated from the "Application Information" page:
 
@@ -92,11 +104,17 @@ Note: make sure every single domain in the file above ends in a `"."` for exampl
 
 Once this file is saved open up the management config website of your DNS provider and import the file above.
 
+#### Final touches
+
 If all is well, after a couple more minutes you should be able to access your website on the domain configured by pressing the "Open WAFRN" button. If it doesn't work you either need to wait a bit more, or check [the logs](#logging) to see what's up. While you wait please double check [your email](#emails-dont-work) and [on-site backup](#on-site-backups-dont-work) settings.
 
 To login you can obtain the administrator password from the same page you got your DNS settings.
 
-Congratulations and Happy WAFRNing!
+** Congratulations and Happy WAFRNing! **
+
+![Congratulations by Placidplace on Pixabay](images/congratulations-7600_256.gif)
+
+![Fresh Site](images/fresh_site.png)
 
 ### Oracle Cloud Shell
 
