@@ -30,9 +30,71 @@ You can also deploy this repository manually by setting up the `.tfvars` by hand
 
 You can [register for Oracle Cloud here](https://signup.cloud.oracle.com/). Email might be slow to arrive. Please note you need to enter your real legal name and address during signup as it will be verified against the credit card / debit card details. Entering fake details will likely fail verification.
 
-When it comes to the Home Region selector make sure you select a region that you're happy that your data will reside in. It might also have some legal implications, for example selecting regions in the EU will definitely require you to abide to GDPR regulations. There are some other considerations to look for, for example the server's location is used to generate link previews, so any resource that the server cannot access to will lack previews. For example if you select Germany as your Home Region the server will not be able to access any YouTube videos that are blocked in Germany.
+When it comes to the Home Region selector make sure you select a region that you're happy that your data will reside in. It might also have some legal implications, for example selecting regions in the EU will definitely require you to abide to GDPR regulations, as well as any local regulations in that specific country.
+
+There are some other considerations to look for, for example the server's location is used to generate link previews, so any resource that the server cannot access to will lack previews for everyone. For example if you select a location in Germany as your Home Region the server will not be able to access any YouTube videos that are blocked in Germany.
+
+Also there might be warnings about low resources in some regions. It is advised to avoid them unless necessary.
 
 ![Home Region](images/home_region.png)
+
+### Stack init
+
+Click the below magic button to initiate your wafrn stack:
+
+[![Deploy to Oracle Cloud][magic_button]][magic_wafrn_basic_stack]
+
+Accept the terms and conditions
+
+![Terms and Conditions](images/terms_and_conditions.png)
+
+Then click NEXT on the bottom of the page
+
+Next page is where you need to fill in your configuration. The following are the only mandatory details you need to fill in:
+
+* WAFRN Domain name
+* Administrator email address
+* Administrator username
+* Enable/Disable Bluesky integration
+* Bluesky domain name and admin user's handle
+
+You can also check "Show advanced options?" to enable/disable extra features. Please check the [Features section](#features) for mode details on these options. While the defaults are good as a basic setup you might want to go through the rest as well.
+
+Once you finish click NEXT on the bottom of the page again.
+
+On the final page double check that everything still makes sense. If yes, at the bottom of the page make sure "Run Apply" is selected, then click "CREATE"
+
+![Apply button](images/apply.png)
+
+(Forgot to enable "Run Apply"? You can click Apply separately on the next page)
+
+Wait for Apply to finish. This can take somewhere between 5-10 minutes. You want to have it run successfully:
+
+![Success page](images/success.png)
+
+If this is in red, and doesn't say "SUCCEEDED" then check the logs for any errors.
+
+Final bit is updating your DNS config. Make sure to "Copy" the DNS settings generated from the "Application Information" page:
+
+![DNS Settings](images/dns_settings.png)
+
+Save the contents to a new file, for example `dns_update.txt`. The contents should look something like:
+
+```
+wafrn.example.com. A 169.254.10.11
+bluesky.example.com. A 169.254.10.11
+*.bluesky.example.com. A 169.254.10.11
+wafrn.example.com. TXT "v=spf1 include:rp.oracleemaildelivery.com include:ap.rp.oracleemaildelivery.com include:eu.rp.oracleemaildelivery.com ~all"
+abcdeFGHijKLmnOP._domainkey.wafrn.example.com. CNAME abcdeFGHijKLmnOP.wafrn.example.com.dkim.mrs1.oracleemaildelivery.com
+```
+
+Once this file is saved open up the management config website of your DNS provider and import the file above.
+
+If all is well, after a couple more minutes you should be able to access your website on the domain configured by pressing the "Open WAFRN" button. If it doesn't work you either need to wait a bit more, or check [the logs](#logging) to see what's up.
+
+To login you can obtain the administrator password from the same page you got your DNS settings.
+
+Congratulations and Happy WAFRNing!
 
 ### Oracle Cloud Shell
 
@@ -86,7 +148,7 @@ The following features are included and will be deployed by the package:
 
 ### Off-site backups
 
-### Logging and monitoring
+### Logging
 
 ## FAQ
 

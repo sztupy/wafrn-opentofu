@@ -148,7 +148,7 @@ variables:
   generate_public_ssh_key:
     type: boolean
     title: "Auto-generate public ssh key?"
-    description: "Auto-generate a public key and assign to the compute instances. Uncheck to provide your own public key or leave blank not to use any attach any key to the compute instance."
+    description: "Auto-generate a public key and assign to the compute instances. Uncheck to provide your own public key. Auto-generation allows you to easily connect your instance from Oracle Cloud Shell. Providing your own will make it easier to connect from your own computer if you already use it to connect to other instances over SSH."
     visible:
       and:
         - show_advanced
