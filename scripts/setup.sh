@@ -40,7 +40,7 @@ chown -R wafrn:wafrn /home/wafrn
 apt install -y s3cmd
 
 # Download WAFRN installer and execute it
-sudo -u wafrn bash -c 'cd /home/wafrn && wget https://raw.githubusercontent.com/sztupy/wafrn/main/install/installer.sh'
+sudo -u wafrn bash -c 'cd /home/wafrn && wget https://raw.githubusercontent.com/gabboman/wafrn/main/install/installer.sh'
 sudo -u wafrn bash -c 'cd /home/wafrn && chmod 755 /home/wafrn/installer.sh && /home/wafrn/installer.sh --unattended'
 
 # Remove the sudo config that allowed the installer above to use sudo during installation

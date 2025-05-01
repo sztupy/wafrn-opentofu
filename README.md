@@ -92,7 +92,7 @@ Note: make sure every single domain in the file above ends in a `"."` for exampl
 
 Once this file is saved open up the management config website of your DNS provider and import the file above.
 
-If all is well, after a couple more minutes you should be able to access your website on the domain configured by pressing the "Open WAFRN" button. If it doesn't work you either need to wait a bit more, or check [the logs](#logging) to see what's up. While you wait please double check your email and on-site backup settings.
+If all is well, after a couple more minutes you should be able to access your website on the domain configured by pressing the "Open WAFRN" button. If it doesn't work you either need to wait a bit more, or check [the logs](#logging) to see what's up. While you wait please double check [your email](#emails-dont-work) and [on-site backup](#on-site-backups-dont-work) settings.
 
 To login you can obtain the administrator password from the same page you got your DNS settings.
 
