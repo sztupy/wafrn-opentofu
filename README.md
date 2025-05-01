@@ -102,23 +102,75 @@ OCI has a built-in shell that you can use to connect to and manage instances. To
 
 ![Cloud Shell](images/cloud_shell.png)
 
-If you asked the script to generate an SSH key for yourself you can install that key onto Oracle Cloud easily:
+There is a small management interface you can download:
 
+```bash
+wget https://raw.githubusercontent.com/sztupy/wafrn-opentofu/refs/heads/main/scripts/wafrn.sh
+chmod 755 wafrn.sh
 ```
-STACK_ID=`oci resource-manager stack list -c $OCI_TENANCY | jq -r ".data[0].id"`
-oci resource-manager stack get-stack-tf-state --stack-id $STACK_ID --file - | jq -r '.outputs.generated_private_key_pem.value' > ~/.ssh/id_rsa
-chmod 600 ~/.ssh/id_rsa
+
+Next if you allowed the stack to install the SSH keys automatically you can set it up using:
+
+```bash
+./wafrn.sh init
 ```
 
-(the first line only works if you have a single stack installed, otherwise provide the Wafrn one manually)
+If you have provided a public key by yourself you will need to install the relevant private key manually.
 
-Once you have done this you should be able to `ssh ubuntu@<your_instance_ip>` and connect to the box.
+Once keys are installed either way you can do the following:
 
-If you have provided a public key by yourself you will need to install the relevant private key manually before you can access your instance from the Cloud Shell
+#### Connect
+
+```bash
+./wafrn.sh connect
+```
+
+#### Connect with sudo access
+
+This will connect to the instance as the `wafrn` user using SSH
+
+```bash
+./wafrn.sh connect_sudo
+```
+
+#### Creating backups
+
+This will connect to the instance using SSH to a user with sudo access
+
+```bash
+./wafrn.sh backup
+```
+
+#### Updating the application
+
+This will generate a new backup and upload it to the on&offsite backups if required
+
+```bash
+./wafrn.sh backup
+./wafrn.sh update
+```
+
+This will first backup the current system, then update the application. Once updated it will start showing fresh logs so you can double check all looks good
+
+#### Restoring backup
+
+```bash
+./wafrn.sh restore <backup_location>
+```
+
+This allows you to restore a specific backup. Note: you need to copy/download the backup to the box first
+
+#### PDS (Bluesky) Admin
+
+```bash
+./wafrn.sh pdadmin <command> <parameters>
+```
+
+This supports some PDS administrative features. Check [Bluesky](#bluesky) on valid options
 
 ### Update Wafrn
 
-To update Wafrn follow the steps below:
+If you don't want to use the Cloud Shell's management tools you can also backup and update manually:
 
 1. Connect to your instance through ssh. Either follow the Cloud Shell setup above, or manually using openssh, PuTTY or similar tools
 
@@ -130,9 +182,33 @@ sudo su -l wafrn
 ~/wafrn/install/manage.sh update
 ```
 
-### Update Infrastructure
+### Update / Change infrastructure setup
 
+**WARNING** Blindly updating the infrastrucute can cause massive data loss. Make sure you create an **off-site** backup before doing this, as you can get your stack deleted.
 
+To update your infrastucture you can manually upload a fresh Opentofu config:
+
+![Update Plan](images/update_plan.png)
+
+Afterwards you need to download the latest zip file from the Releases page here on GitHub, and upload it over at OCI. The steps afterwards are similar to what you have done during initial setup but it is advised **NOT** to "Run Apply". Instead click "Plan" on the next page and manually check all the changes that the system want to do. If in doubt reach out to us in the [Wafrn Discord](https://discord.gg/EXpCBpvM) to get support.
+
+Note: not all features can be updated later. For example to update SMTP settings, or to set up or change the backup settings you will need to manually update the settings on the box.
+
+### Deleting the stack
+
+To delete your wafrn stack and free up all resources used by wafrn:
+
+1. If you have on-site backups enabled you need to manually delete your on-site backup Bucket. You can do this from the OCI console by going to the buckets.
+
+2. Once it is deleted go to your Stack, and press the Destroy button.
+
+3. Wait for it to go green
+
+4. If it finishes successfully (don't forget you need to delete the on-site backup bucket manually), you can also click "More Actions" -> "Delete Stack" to finish cleanup
+
+![Destroy](images/destroy.png)
+
+**Note:** You need to do "Destroy" first to clean up resources. If you "Delete Stack" without running "Destroy" your instances, network setup, additional users, buckets, email settings, ip addresses etc. will still keep running, consume resources and need to be cleaned up manually
 
 ## Features
 
@@ -140,15 +216,51 @@ The following features are included and will be deployed by the package:
 
 ### Wafrn
 
+This is the core feature you wanted to install, right?
+
 ### Bluesky
+
+This is the additional packages needed to enable the Bluesky integration within Wafrn. This includes installing a separate PDS server and the required setup to connect to it.
+
+To help manage Bluesky you can use the following commands from OCI Cloud Shell:
+
+Some examples:
+
+```bash
+./wafrn.sh pdsadmin add-insert-code # Inject a new invite code to the system someone can use to enable Bluesky for them
+./wafrn.sh pdsadmin list-users # List all of the users enabled for Bluesky
+./wafrn.sh pdsadmin user-reset-password <did> # Resets the credential for a specific did
+```
+
+Check [this page on Wafrn GitHub](https://github.com/gabboman/wafrn/tree/main/install/bsky) to see all options
 
 ### Emails
 
+By default the stack will use OCI's email sending feature to send emails. For it to work you will need to add proper DCIM and SPF policies to your DNS setting, which are included in the DNS setup phase.
+
+Note: the free tier only allows 100 emails a day, so it's preferred to have "Send pre-activation emails" disabled as it could be misused by attackers spamming the system and going over this limit easily.
+
+You can also provide your own SMTP config if you have something better, or disable email sending completely.
+
 ### On-site backups
+
+By default the stack will enable on-site backups which will save the database, upload folder and pds details (if bluesky is enabled) into an S3 compatible bucket. Backups will happend each day at around 3am UTC. Backup is limited to the pre-set days, and the script also tries to make sure you're not going over the free limit of 10GB by deleting large backup files (likely media ones) before uploading a new set.
 
 ### Off-site backups
 
+You can also enable off-site backups, by specifying credentials for an S3 compatible bucket outside of OCI. This can be used as a safeguard as it's known that Oracle might delete stacks running on Always Free instances occasionally, which includes the on-site backups as well.
+
+These off-site backups would allow you to restore your system even if the on-site backups get destroyed.
+
+Alternatively you can set up backup scripts on your personal computer to download the on-site backups every day. You can obtain the `s3cmd` config file from your instance, it will be named `/home/wafrn/onsite.s3cfg` and set up some kind of cron on UNIX or [scheduled task](https://medium.com/@ogonnannamani11/how-to-use-windows-task-scheduler-to-automate-local-directory-sync-with-aws-s3-7fd1ccb79c6) on Windows machines that would sync the S3 backups every day.
+
 ### Logging
+
+The following data are uploaded to [OCI's logging interface](https://cloud.oracle.com/logging/logs):
+
+* Installation logs
+* Syslogs, including cron
+* Docker container logs, including logs for the backend, frontend, database and PDS instance
 
 ## FAQ
 
@@ -157,6 +269,10 @@ The following features are included and will be deployed by the package:
 You need a domain name you control which you might get for free, but usually they cost a few of your local currency each year. You also need to accept Oracle Cloud Infrastructure's Terms and Conditions which might or might not sell your soul to the devil. A small price to pay though.
 
 Also you will need a Credit or Debit card during the signup for verification, and around $1/£1/€1 will be locked on it during the verification process which will be refunded later.
+
+### I've heard Oracle occasionally deletes Always Free setups
+
+Yes, hence it's advised to keep both on-site and also setup off-site backups. You can also upgrade your account from a free tier to a pay-as-you-go tier. It will still be free if you don't go over the Always Free tier limits, but after upgrade there's a chance that you can get billed if you go over some kind of limit. It is generally advised to keep an eye out on billling and to assign a credit/debit card to your billing with low limits.
 
 # LICENSE
 

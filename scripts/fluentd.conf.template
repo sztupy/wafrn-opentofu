@@ -27,7 +27,7 @@
   tag syslog
   path_key tailed_path
   <parse>
-    @type syslog
+    @type none
   </parse>
 </source>
 <match {syslog.**,install.**,docker.**}>
