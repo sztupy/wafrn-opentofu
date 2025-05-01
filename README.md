@@ -116,6 +116,8 @@ To login you can obtain the administrator password from the same page you got yo
 
 ![Fresh Site](images/fresh_site.png)
 
+## Manage installation
+
 ### Oracle Cloud Shell
 
 OCI has a built-in shell that you can use to connect to and manage instances. To access click on the Cloud Shell button in the corner:
