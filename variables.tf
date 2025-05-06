@@ -141,6 +141,10 @@ variable "show_advanced" {
   default = false
 }
 
+variable "installer_location" {
+  default = "https://raw.githubusercontent.com/gabboman/wafrn/main/install/installer.sh"
+}
+
 # Always Free only or support other shapes
 variable "use_only_always_free_eligible_resources" {
   default = true

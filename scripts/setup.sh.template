@@ -26,7 +26,7 @@ netfilter-persistent save
 # add local DNS config as a workaround as DNS will only be setup much later, but the instances need it
 source /wafrn-cloud-config
 PUBLIC_IP=`dig +short myip.opendns.com @resolver1.opendns.com`
-if [ -n "${PDS_DOMAIN_NAME}" ]; then
+if [ -n "$PDS_DOMAIN_NAME" ]; then
   echo "$PUBLIC_IP $DOMAIN_NAME $PDS_DOMAIN_NAME" >> /etc/hosts
 else
   echo "$PUBLIC_IP $DOMAIN_NAME" >> /etc/hosts
@@ -40,7 +40,7 @@ chown -R wafrn:wafrn /home/wafrn
 apt install -y s3cmd
 
 # Download WAFRN installer and execute it
-sudo -u wafrn bash -c 'cd /home/wafrn && wget https://raw.githubusercontent.com/gabboman/wafrn/main/install/installer.sh'
+sudo -u wafrn bash -c 'cd /home/wafrn && wget ${installer_location}'
 sudo -u wafrn bash -c 'cd /home/wafrn && chmod 755 /home/wafrn/installer.sh && /home/wafrn/installer.sh --unattended'
 
 # Remove the sudo config that allowed the installer above to use sudo during installation

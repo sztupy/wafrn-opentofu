@@ -65,6 +65,10 @@ groupings:
       - email_smtp_username
       - email_smtp_password
 
+  - title: "Install"
+    variables:
+      - installer_location
+
   - title: "Extras Hidden"
     variables:
       - user_ocid
@@ -208,7 +212,7 @@ variables:
     type: integer
     minimum: 1
     maximum: 1000
-    title: "Maximum size of object storage used for backups. Once exceeded large files will be removed from the backup based on file size and backup date"
+    title: "Maximum size of object storage used for backups in GB. Once exceeded large files will be removed from the backup based on file size and backup date"
     description: "Note: 10 GB is the maximum you're allowed to have on the Always Free Tier. Also one backup will always be kept even if the size of the backup would be larger than the set size"
     default: 10
     required: true
@@ -278,7 +282,7 @@ variables:
     type: integer
     minimum: 1
     maximum: 1000
-    title: "Maximum size of object storage used for backups. Once exceeded large files will be removed from the backup based on file size and backup date"
+    title: "Maximum size of object storage used for backups in GB. Once exceeded large files will be removed from the backup based on file size and backup date"
     default: 10
     required: true
     visible:
@@ -365,6 +369,16 @@ variables:
         - show_advanced
         - enable_emails
         - use_third_party_smtp
+
+  installer_location:
+    type: string
+    title: "Installer location"
+    description: "The location of the WAFRN installer script. Change this from the official one if you need to install a different version or fork."
+    default: https://raw.githubusercontent.com/gabboman/wafrn/main/install/installer.sh
+    required: true
+    visible:
+      and:
+        - show_advanced
 
 outputGroups:
   - title: WAFRN App details

@@ -112,7 +112,9 @@ data "cloudinit_config" "nodes" {
 
 ## Files and Templatefiles
 locals {
-  setup_template  = file("${path.module}/scripts/setup.sh")
+  setup_template  = templatefile("${path.module}/scripts/setup.sh.template", {
+    installer_location: var.installer_location
+  })
   sudoers_content = file("${path.module}/scripts/sudoers_wafrn_setup")
   fluentd_content = templatefile("${path.module}/scripts/fluentd.conf.template",
     {
