@@ -313,8 +313,8 @@ variables:
   email_send_activation_emails:
     type: boolean
     title: "Send pre-activation emails"
-    default: false
-    description: "Set whether to send emails to users before they are activated. While this is a nice thing to do it allows your instance to send out a lot of spam if someone would register random email addresses. Since the email sending limit is 100 a day on OCI it might be better to turn it off there, but if you use your own SMTP server or have paid emails enabled on OCI it might be worth to turn it on. When disabled only users who are activated will receive emails"
+    default: true
+    description: "Set whether to send emails to users before they are activated. Since the email sending limit is 100 a day on OCI it might be better to turn it off there, but if you use your own SMTP server or have paid emails enabled on OCI it might be worth to turn it on. When disabled you'll need to manually activate users who are registered through the database."
     visible:
       and:
         - show_advanced

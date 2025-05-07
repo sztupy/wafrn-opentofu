@@ -283,7 +283,7 @@ Check [this page on Wafrn GitHub](https://github.com/gabboman/wafrn/tree/main/in
 
 By default the stack will use OCI's email sending feature to send emails. For it to work you will need to add proper DCIM and SPF policies to your DNS setting, which are included in the DNS setup phase.
 
-> **Note:** the free tier only allows 100 emails a day, so it's preferred to have "Send pre-activation emails" disabled as it could be misused by attackers spamming the system and going over this limit easily.
+> **Note:** the free tier only allows 100 emails a day, so it might be useful to have "Send pre-activation emails" disabled as it could be misused by attackers spamming the system and going over this limit easily.
 
 You can also provide your own SMTP config if you have something better, or disable email sending completely.
 

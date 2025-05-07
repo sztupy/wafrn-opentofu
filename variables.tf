@@ -115,7 +115,7 @@ variable "enable_off_site_backup" {
   default = false
 }
 variable "email_send_activation_emails" {
-  default = false
+  default = true
 }
 variable "off_site_backup_key" {
   default = ""
