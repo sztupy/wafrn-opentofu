@@ -1,3 +1,9 @@
+# Archive!
+
+This has project has moved to https://codeberg.org/wafrn/wafrn-opentofu
+
+-----
+
 # WAFRN OCI OpenTofu scripts
 
 Oracle Resource Manager compatible terraform / opentofu scripts to deploy a small but production-ready WAFRN instance to Oracle Cloud Infrastructure using only Always Free tier eligible instances
