@@ -21,6 +21,10 @@ variable "public_ssh_key" {
   default = ""
 }
 
+variable "install_type" {
+  default = "2"
+}
+
 variable "network_cidrs" {
   type = map(string)
 

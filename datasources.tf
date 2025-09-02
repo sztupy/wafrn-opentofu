@@ -25,6 +25,16 @@ resource "random_string" "wafrn_admin_password" {
   override_special = "_-"
 }
 
+resource "random_string" "grafana_admin_password" {
+  length           = 24
+  special          = true
+  min_upper        = 3
+  min_lower        = 3
+  min_numeric      = 3
+  min_special      = 1
+  override_special = "_-"
+}
+
 # Check for resource limits
 ## Check available compute shape
 data "oci_limits_services" "compute_services" {
@@ -159,6 +169,8 @@ locals {
       smtp_password         = local.email_smtp_password
       smtp_from             = local.sender_email_address
       send_activation_email = var.email_send_activation_emails ? "Y" : ""
+      install_type          = var.install_type
+      grafana_password      = random_string.grafana_admin_password.result
   })
   cloud_init = templatefile("${path.module}/scripts/cloud-config.template.yaml",
     {

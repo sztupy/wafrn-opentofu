@@ -32,6 +32,7 @@ groupings:
       - show_advanced
       - generate_public_ssh_key
       - public_ssh_key
+      - install_type
 
   - title: "Instance setup"
     variables:
@@ -157,6 +158,20 @@ variables:
       and:
         - show_advanced
 
+  install_type:
+    type: enum
+    enum:
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+    title: "Installation options"
+    description: "1: Minimum install. Uses the least amount of resources; 2: Minimum install with Monitoring support through Grafana; 3: Advanced install (suitable for larger instances); 4: Advanced install with Grafana monitoring support"
+    visible:
+      and:
+        - show_advanced
+    default: "2"
+
   public_ssh_key:
     type: oci:core:ssh:publickey
     title: "SSH Public Key"
@@ -167,9 +182,9 @@ variables:
     visible:
       and:
         - and:
-          - show_advanced
+            - show_advanced
         - not:
-          - generate_public_ssh_key
+            - generate_public_ssh_key
 
   instance_volume_size:
     type: integer
@@ -182,9 +197,9 @@ variables:
     visible:
       and:
         - and:
-          - show_advanced
+            - show_advanced
         - not:
-          - use_only_always_free_eligible_resources
+            - use_only_always_free_eligible_resources
 
   enable_on_site_backup:
     type: boolean
@@ -219,10 +234,10 @@ variables:
     visible:
       and:
         - and:
-          - show_advanced
-          - enable_on_site_backup
+            - show_advanced
+            - enable_on_site_backup
         - not:
-          - use_only_always_free_eligible_resources
+            - use_only_always_free_eligible_resources
 
   enable_off_site_backup:
     type: boolean
@@ -389,6 +404,7 @@ outputGroups:
   - title: Passwords and Keys
     outputs:
       - wafrn_admin_password
+      - grafana_admin_password
       - generated_private_key_pem
 
   - title: Deployment Info
@@ -428,6 +444,13 @@ outputs:
     type: copyableString
     title: Password for the admin user
     displayText: "Password for the admin user"
+    visible: true
+    sensitive: true
+
+  grafana_admin_password:
+    type: copyableString
+    title: Password for the grafana user
+    displayText: "Password for the grafana user"
     visible: true
     sensitive: true
 

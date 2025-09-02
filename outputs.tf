@@ -22,6 +22,11 @@ output "wafrn_admin_password" {
   sensitive = true
 }
 
+output "grafana_admin_password" {
+  value     = random_string.grafana_admin_password.result
+  sensitive = true
+}
+
 output "dns_updates" {
   value = templatefile("${path.module}/scripts/dns_config.template",
     {
